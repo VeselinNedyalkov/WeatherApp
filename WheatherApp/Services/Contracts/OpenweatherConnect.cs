@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
+using System.Text;
 using WheatherApp.Models;
 
 namespace WheatherApp.Services.Contracts
@@ -17,13 +18,13 @@ namespace WheatherApp.Services.Contracts
             wheatherUrlPreliminary = config.GetValue<string>("Openweathermap:StartUrl");
             wheatherKey = config.GetValue<string>("Openweathermap:ApiKey");
         }
-        public async Task<Response> RequestWheatherData(string city, string units)
+        public async Task<Response> RequestWeatherData(string city, string units)
         {
-            string wheatherUrl = wheatherUrlPreliminary + city + wheatherKey + units;
+            string wheatherUrl = GetWheatherUrl(city, units);
 
             try
             {
-                var client = httpClient.CreateClient("WheatherAPI");
+                var client = httpClient.CreateClient("WeatherAPI");
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(wheatherUrl);
@@ -38,7 +39,7 @@ namespace WheatherApp.Services.Contracts
                 {
                     Response responceModel = JsonConvert.DeserializeObject<Response>(apiContet);
 
-                    if (apiResponse.StatusCode != HttpStatusCode.BadRequest || 
+                    if (apiResponse.StatusCode != HttpStatusCode.BadRequest ||
                         apiResponse.StatusCode != HttpStatusCode.NotFound)
                     {
                         responceModel.IsSuccess = true;
@@ -66,6 +67,17 @@ namespace WheatherApp.Services.Contracts
                 };
                 return dto;
             }
+        }
+
+        private string GetWheatherUrl(string city, string units)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(wheatherUrlPreliminary);
+            sb.Append(city);
+            sb.Append(wheatherKey);
+            sb.Append(units);
+
+            return sb.ToString();
         }
     }
 }

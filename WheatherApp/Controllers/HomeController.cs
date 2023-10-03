@@ -15,7 +15,7 @@ namespace WheatherApp.Controllers
 
         public IActionResult Index()
         {
-            wheatherService.RequestWheatherData("Varna" , "metric");
+            wheatherService.RequestWeatherData("Varna" , "metric");
             return View();
         }
 
