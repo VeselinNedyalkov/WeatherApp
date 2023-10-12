@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WeatherApp.Models;
 using WheatherApp.Models;
 using WheatherApp.Services.Contracts;
 
@@ -13,10 +14,10 @@ namespace WheatherApp.Controllers
             wheatherService = _wheatherService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            wheatherService.RequestWeatherData("Varna" , "metric");
-            return View();
+            WheaterDTO wheater = await wheatherService.RequestWeatherData("Varna" , "metric");
+            return View(wheater);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

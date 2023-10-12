@@ -1,9 +1,9 @@
-﻿using WheatherApp.Models;
+﻿using WeatherApp.Models;
 
 namespace WheatherApp.Services.Contracts
 {
     public interface IOpenweatherConnect
     {
-        public Task<Response> RequestWeatherData(string city,string units);
+        public Task<WheaterDTO> RequestWeatherData(string city,string units);
     }
 }
